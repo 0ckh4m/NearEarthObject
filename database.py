@@ -128,8 +128,9 @@ class NEODatabase:
         # print(filters) # for my own testing
         for approach in self._approaches:
             flag = True
-            for f in filters:
-                if not f(approach):
+            for filter in filters:
+                if not filter(approach):
                     flag = False
                     break
+            if flag == True:
                 yield approach

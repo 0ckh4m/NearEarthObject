@@ -152,25 +152,24 @@ def create_filters(
         filters.append(DistanceFilter(operator.ge, distance_min))
     # :param distance_max: A maximum nominal approach distance for a matching `CloseApproach`.
     if distance_max != None:
-        filters.append(DistanceFilter(operator.ge, distance_max))
+        filters.append(DistanceFilter(operator.le, distance_max))
     # :param velocity_min: A minimum relative approach velocity for a matching `CloseApproach`.
     if velocity_min != None:
         filters.append(VelocityFilter(operator.ge, velocity_min))
     # :param velocity_max: A maximum relative approach velocity for a matching `CloseApproach`.
     if velocity_max != None:
-        filters.append(VelocityFilter(operator.ge, velocity_max))
+        filters.append(VelocityFilter(operator.le, velocity_max))
     # :param diameter_min: A minimum diameter of the NEO of a matching `CloseApproach`.
     if diameter_min != None:
         filters.append(DiameterFilter(operator.ge, diameter_min))
     # :param diameter_max: A maximum diameter of the NEO of a matching `CloseApproach`.
     if diameter_max != None:
-        filters.append(DiameterFilter(operator.ge, diameter_max))
+        filters.append(DiameterFilter(operator.le, diameter_max))
     # :param hazardous: Whether the NEO of a matching `CloseApproach` is potentially hazardous.
     if hazardous != None:
         filters.append(HazardousFilter(operator.eq, hazardous))
 
-
-    return (filters)
+    return filters
 
 
 def limit(iterator, n=None):
@@ -184,7 +183,9 @@ def limit(iterator, n=None):
     """
     # TODO: Produce at most `n` values from the given iterator.
     # return iterator
-    if n == None:
-        return iterator
+    # if n == None:
+    #     return iterator
     if n is not None and n != 0:
         return itertools.islice(iterator, n)
+    else:
+        return iterator
