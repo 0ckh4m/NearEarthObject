@@ -41,30 +41,21 @@ class NEODatabase:
         """
         self._neos = neos
         self._approaches = approaches
-
-        # TODO: What additional auxiliary data structures will be useful?
         self.neos_designation_dict = {}
         self.neos_name_dict = {}
         
-        # TODO: Link together the NEOs and their close approaches.
         for neo in self._neos:
             self.neos_designation_dict[neo.designation] = neo
-            self.neos_name_dict[neo.name] = neo 
+            self.neos_name_dict[neo.name] = neo
             
-            # for approach in self._approaches:
-            #     if neo.designation == approach._designation:
-            #         approach.neo = neo 
-            #         neo.approaches.append(approach) # ! this is NOT working... WHY???
-        
         for approach in self._approaches:
             designation = approach._designation
-            neo = self.neos_designation_dict.get(designation) # ! this looks wrong! I'm modifying just the neo in te the Neos_designation_dict and I should modify the "original" neo, right?????
+            neo = self.neos_designation_dict.get(designation)
             approach.neo = neo  
             neo.approaches.append(approach)
 
     def get_neo_by_designation(self, designation):
         """Find and return an NEO by its primary designation.
-
         If no match is found, return `None` instead.
 
         Each NEO in the data set has a unique primary designation, as a string.
@@ -75,12 +66,6 @@ class NEODatabase:
         :param designation: The primary designation of the NEO to search for.
         :return: The `NearEarthObject` with the desired primary designation, or `None`.
         """
-        # TODO: Fetch an NEO by its primary designation.
-        # if designation.lower() in self.neos_designation_dict:
-        #     return self._neos[self.neos_designation_dict[designation]]
-        #     return      # I can use .get() to retrieve just the key and value I want??
-        # else:
-        #     return None
         return self.neos_designation_dict.get(designation)
 
     def get_neo_by_name(self, name):
@@ -97,18 +82,7 @@ class NEODatabase:
         :param name: The name, as a string, of the NEO to search for.
         :return: The `NearEarthObject` with the desired name, or `None`.
         """
-        # TODO: Fetch an NEO by its name.
-        # here I'm using different apprach than the one used with get_neo_by_designation. Because there are neos without names I used the positon as Key and the name as Value. This is because Keys must be unique and every neo without name would return None.
-        # if name.lower() in self.neos_name_dict.values():
-        #     position = [k for k, v in self.neos_name_dict.items() if v == name.lower()][0]
-        #     return self._neos[position]
-        # else:
-        #     return None
-        # neo = self.neos_name_dict.get(name)
-        # for approach in neo.approaches:
-        #     print(approach)
         return self.neos_name_dict.get(name)
-        # return neo
     
     def query(self, filters=()):
         """Query close approaches to generate those that match a collection of filters.
@@ -124,13 +98,11 @@ class NEODatabase:
         :param filters: A collection of filters capturing user-specified criteria.
         :return: A stream of matching `CloseApproach` objects.
         """
-        # TODO: Generate `CloseApproach` objects that match all of the filters.
-        # print(filters) # for my own testing
         for approach in self._approaches:
             flag = True
             for filter in filters:
                 if not filter(approach):
                     flag = False
                     break
-            if flag == True:
+            if flag:
                 yield approach

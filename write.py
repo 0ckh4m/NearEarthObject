@@ -14,6 +14,7 @@ import csv
 import json
 from helpers import datetime_to_str
 
+
 def write_to_csv(results, filename):
     """Write an iterable of `CloseApproach` objects to a CSV file.
 
@@ -28,9 +29,6 @@ def write_to_csv(results, filename):
         'datetime_utc', 'distance_au', 'velocity_km_s',
         'designation', 'name', 'diameter_km', 'potentially_hazardous'
     )
-    # TODO: Write the results to a CSV file, following the specification in the instructions.
-    # approach: designation, time, distance, velocity, neo
-    # neo: name, diameter, hazardous
     with open(filename, 'w') as outfile:
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
         writer.writeheader()
@@ -52,11 +50,6 @@ def write_to_csv(results, filename):
             writer.writerow(approach)
 
 
-
-
-
-
-
 def write_to_json(results, filename):
     """Write an iterable of `CloseApproach` objects to a JSON file.
 
@@ -68,16 +61,6 @@ def write_to_json(results, filename):
     :param results: An iterable of `CloseApproach` objects.
     :param filename: A Path-like object pointing to where the data should be saved.
     """
-    # The datetime_utc value should be a string formatted with datetime_to_str from the helpers module; 
-    # the distance_au and velocity_km_s values should be floats; 
-    # the designation and name should be strings (if the name is missing, it must be the empty string); 
-    # the diameter_km should be a float (if the diameter_km is missing, it should be the JSON value NaN, which Python's json loader successfully rehydrates as float('nan')); 
-    # and potentially_hazardous should be a boolean (i.e. the JSON literals false or true, not the strings 'False' nor 'True').
-
-    # TODO: Write the results to a JSON file, following the specification in the instructions.
-    # approach: time, distance, velocity, neo
-    # neo: designation, name, diameter, hazardous
-    # ? I believe I'll have to change the lines 130 and 132 of models.py to store the whole float value and not in the format :.2f
     approaches = []
     for elem in results:
         approach = {}
@@ -86,11 +69,11 @@ def write_to_json(results, filename):
         approach["velocity_km_s"] = elem.velocity
         neo = {}
         neo["designation"] = elem.neo.designation
-        if elem.neo.name == None or elem.neo.name == '':
+        if elem.neo.name is None or elem.neo.name == '':
             neo['name'] = ''
         else:
             neo['name'] = elem.neo.name
-        if elem.neo.diameter == '' or elem.neo.diameter == None or elem.neo.diameter == float('nan'):
+        if elem.neo.diameter == '' or elem.neo.diameter is None or elem.neo.diameter == float('nan'):
             neo['diameter_km'] = float('nan')
         else:
             neo['diameter_km'] = elem.neo.diameter
